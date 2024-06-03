@@ -6,6 +6,8 @@ from fastapi import FastAPI, Request, Response
 
 from fastapi_redis_cache import cache, cache_one_hour, cache_one_minute
 
+from .pydantic import SampleModel
+
 app = FastAPI(title="FastAPI Redis Cache Test App")
 
 
@@ -30,6 +32,12 @@ def cache_json_encoder():
         "finish_by": date(2021, 4, 21),
         "final_calc": Decimal(3.14),
     }
+
+
+@app.get("/cache_pydantic")
+@cache()
+def cache_json_list():
+    return SampleModel(key="it works!")
 
 
 @app.get("/cache_one_hour")

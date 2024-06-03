@@ -6,8 +6,8 @@ from decimal import Decimal
 
 import pytest
 from fastapi.testclient import TestClient
-from fastapi_redis_cache.client import HTTP_TIME
 
+from fastapi_redis_cache.client import HTTP_TIME
 from fastapi_redis_cache.util import deserialize_json
 from tests.main import app
 
@@ -121,6 +121,15 @@ def test_cache_json_encoder():
     assert json_dict["start_time"] == datetime(2021, 4, 20, 7, 17, 17)
     assert json_dict["finish_by"] == datetime(2021, 4, 21)
     assert json_dict["final_calc"] == Decimal(3.14)
+
+
+def test_cache_pydantic():
+    response = client.get("/cache_pydantic")
+    assert response.status_code == 200
+    response_json = response.json()
+    assert response_json == {
+        "key": "it works!"
+    }
 
 
 def test_cache_control_no_cache():
