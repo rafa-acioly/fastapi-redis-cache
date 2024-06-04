@@ -39,6 +39,8 @@ def cache(*, expire: Union[int, timedelta] = ONE_YEAR_IN_SECONDS):
             create_response_directly = not response
             if create_response_directly:
                 response = Response()
+                if "content-length" in response.headers.keys():
+                    del response.headers["content-length"]
             redis_cache = FastApiRedisCache()
             if redis_cache.not_connected or redis_cache.request_is_not_cacheable(request):
                 # if the redis client is not connected or request is not cacheable, no caching behavior is performed.
