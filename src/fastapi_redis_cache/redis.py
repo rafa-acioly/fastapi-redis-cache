@@ -20,7 +20,8 @@ def _connect(host_url: str) -> Tuple[RedisStatus, redis.client.Redis]:  # pragma
             host=url.hostname,
             port=url.port,
             username=url.username,
-            password=url.password
+            password=url.password,
+            ssl=True
         )
         if redis_client.ping():
             return (RedisStatus.CONNECTED, redis_client)
