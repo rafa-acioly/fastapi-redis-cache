@@ -1,6 +1,7 @@
 """redis.py"""
 import os
 from typing import Tuple
+from urllib.parse import urlparse
 
 import redis
 
@@ -14,7 +15,13 @@ def redis_connect(host_url: str) -> Tuple[RedisStatus, redis.client.Redis]:
 
 def _connect(host_url: str) -> Tuple[RedisStatus, redis.client.Redis]:  # pragma: no cover
     try:
-        redis_client = redis.from_url(host_url)
+        url = urlparse(host_url)
+        redis_client = redis.Redis(
+            host=url.hostname,
+            port=url.port,
+            username=url.username,
+            password=url.password
+        )
         if redis_client.ping():
             return (RedisStatus.CONNECTED, redis_client)
         return (RedisStatus.CONN_ERROR, None)
